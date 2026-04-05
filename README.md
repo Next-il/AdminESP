@@ -15,3 +15,6 @@ Like any other CSS plugin;
 - "hide_from_spectator_list" - Whether to hide the Admin that is using the ESP from a cheats spectator's list(tested on neverlose)
 - "allow_esp_when_dead" - Wether to allow the dead admins to enter esp
 - "skip_spectating_espers" - Skip force hidding glowing props if spectating admin has enabled ESP
+
+## Build
+`dotnet build AdminESP.csproj -c Release -o Build`

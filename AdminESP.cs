@@ -10,8 +10,8 @@ namespace AdminESP;
 
 public sealed partial class AdminESP : BasePlugin, IPluginConfig<Config>
 {
-    public override string ModuleName => "CSXRAY";
-    public override string ModuleAuthor => "firekickfly;
+    public override string ModuleName => "Next-il | Admin ESP";
+    public override string ModuleAuthor => "ShiNxz";
     public override string ModuleVersion => "1.0"; 
     public override string ModuleDescription => "Plugin uses code borrowed from CS2Fixes / cs2kz-metamod / hl2sdk / unknown cheats and xstage from CS# discord";
 
@@ -58,9 +58,9 @@ public sealed partial class AdminESP : BasePlugin, IPluginConfig<Config>
         }
     }
 
-    [ConsoleCommand("css_esp", "Toggle Admin ESP (non-persistent)")]
+    [ConsoleCommand("css_esp", "Toggle Admin ESP")]
     [CommandHelper(minArgs: 0, whoCanExecute: CommandUsage.CLIENT_ONLY)]
-    public void OnToggleAdminEsp(CCSPlayerController? player, CommandInfo command)
+    public void OnTogglePersistentAdminEsp(CCSPlayerController? player, CommandInfo command)
     {
         if (player is null || player.IsValid is not true) return;
 
@@ -69,51 +69,23 @@ public sealed partial class AdminESP : BasePlugin, IPluginConfig<Config>
             return;  
         }
 
-        // Allow spectators always
-        if (player.Team is CsTeam.Spectator) {
-            ApplyESPToggle(player, !toggleAdminESP[player.Slot]);
-            SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (toggleAdminESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
-            return;
-        }
-
-        // Allow alive or dead (non-spectator) admins if config permits
-        if (Config.AllowDeadAdminESP is true) {
-            ApplyESPToggle(player, !toggleAdminESP[player.Slot]);
-            SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (toggleAdminESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
-            return;
-        }
-
-        SendMessageToSpecificChat(player, msg: "Admin ESP is only allowed in {RED}spectate mode{DEFAULT}!", print: PrintTo.Chat);
-    }
-
-    [ConsoleCommand("css_esp_p", "Toggle Persistent Admin ESP")]
-    [CommandHelper(minArgs: 0, whoCanExecute: CommandUsage.CLIENT_ONLY)]
-    public void OnTogglePersistentAdminEsp(CCSPlayerController? player, CommandInfo command)
-    {
-        if (player is null || player.IsValid is not true) return;
-
-        if (AdminManager.PlayerHasPermissions(player, Config.AdminFlag) is not true) {
-            SendMessageToSpecificChat(player, msg: "Persistent Admin ESP can only be used from {GREEN}admins{DEFAULT}!", print: PrintTo.Chat);
-            return;  
-        }
-
         wantESP[player.Slot] = !wantESP[player.Slot];
 
         // Allow spectators always
         if (player.Team is CsTeam.Spectator) {
             ApplyESPToggle(player, wantESP[player.Slot]);
-            SendMessageToSpecificChat(player, msg: $"Persistent Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
+            SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
             return;
         }
 
         // Allow alive or dead (non-spectator) admins if config permits
         if (Config.AllowDeadAdminESP is true) {
             ApplyESPToggle(player, wantESP[player.Slot]);
-            SendMessageToSpecificChat(player, msg: $"Persistent Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
+            SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
             return;
         }
 
-        SendMessageToSpecificChat(player, msg: "Persistent Admin ESP is only allowed in {RED}spectate mode{DEFAULT}!", print: PrintTo.Chat);
+        SendMessageToSpecificChat(player, msg: "Admin ESP is only allowed in {RED}spectate mode{DEFAULT}!", print: PrintTo.Chat);
     }
 
     public void OnConfigParsed(Config config)
