@@ -69,23 +69,14 @@ public sealed partial class AdminESP : BasePlugin, IPluginConfig<Config>
             return;  
         }
 
+        if (player.Team is not CsTeam.Spectator && player.Team is not CsTeam.None) {
+            SendMessageToSpecificChat(player, msg: "Admin ESP is only allowed in {RED}spectate mode{DEFAULT}!", print: PrintTo.Chat);
+            return;
+        }
+
         wantESP[player.Slot] = !wantESP[player.Slot];
-
-        // Allow spectators always
-        if (player.Team is CsTeam.Spectator) {
-            ApplyESPToggle(player, wantESP[player.Slot]);
-            SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
-            return;
-        }
-
-        // Allow alive or dead (non-spectator) admins if config permits
-        if (Config.AllowDeadAdminESP is true) {
-            ApplyESPToggle(player, wantESP[player.Slot]);
-            SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
-            return;
-        }
-
-        SendMessageToSpecificChat(player, msg: "Admin ESP is only allowed in {RED}spectate mode{DEFAULT}!", print: PrintTo.Chat);
+        ApplyESPToggle(player, wantESP[player.Slot]);
+        SendMessageToSpecificChat(player, msg: $"Admin ESP has been " + (wantESP[player.Slot] ? "{GREEN}enabled!" : "{RED}disabled!"), print: PrintTo.Chat);
     }
 
     public void OnConfigParsed(Config config)
